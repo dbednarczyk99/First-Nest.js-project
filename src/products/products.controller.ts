@@ -20,7 +20,7 @@ export class ProductsController {
   // GET(/products) - get all products
   @Get('/')
   async getAllProducts() {
-    return this.productsService.getAll();
+    return await this.productsService.getAll();
   }
 
   // GET(/products/:productId) - get product by id
@@ -60,5 +60,17 @@ export class ProductsController {
 
     await this.productsService.updateById(id, productData);
     return { success: true };
+  }
+
+  @Get('/extended')
+  async getAllExtended() {
+    return await this.productsService.getAllExtended();
+  }
+
+  @Get('/extended/:id')
+  async getByIdExtended(@Param('id', new ParseUUIDPipe()) id: string) {
+    const prod = await this.productsService.getByIdExtended(id);
+    if (!prod) throw new NotFoundException('Product not found!');
+    return prod;
   }
 }
